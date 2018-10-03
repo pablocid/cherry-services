@@ -1,0 +1,80 @@
+service: cherrytracker-services
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: prod
+  region: us-east-1
+  apiKeys:
+    - apikey1
+
+functions:
+  aggregate:
+    handler: handler.aggregate
+    timeout: 300
+    memory: 1536
+    events:
+      - http:
+         path: aggreate
+         method: post
+         private: private
+         cors: true
+  aggregateQuery:
+    handler: handler.aggregateQuery
+    timeout: 300
+    memory: 1536
+    events:
+      - http:
+         path: aggregate-query
+         method: post
+         private: private
+         cors: true
+  toSheet:
+    handler: handler.toSheet
+    timeout: 300
+    memory: 1536
+    events:
+      - http:
+         path: to-sheet
+         method: post
+         private: private
+         cors: true
+  fromSheet:
+    handler: handler.fromSheet
+    timeout: 300
+    memory: 1536
+    events:
+      - http:
+         path: from-sheet
+         method: get
+         private: private
+         cors: true
+  asyncAggregate:
+    handler: handler.asyncAggregate
+    timeout: 60
+    memory: 128
+    events:
+      - http:
+         path: asyncaggregate
+         method: post
+         private: private
+         cors: true
+  query:
+    handler: handler.query
+    timeout: 60
+    memory: 128
+    events:
+      - http:
+         path: query
+         method: get
+         private: true
+         cors: true
+plugins:
+ - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    packager: 'npm'
+    includeModules:
+      forceExclude:
+        - aws-sdk

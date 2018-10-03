@@ -1,0 +1,5 @@
+dist
+node_modules
+.serverless
+.webpack
+src/util/config.ts
